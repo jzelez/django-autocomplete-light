@@ -5,6 +5,10 @@
         // This widget has a clear button
         $(this).find('option[value=""]').remove();
 
+        // check if widget is part of a formset (prefix)
+        var prefix = this.name.match(/(\w+\-\d{1,2}\-)\w+/);
+        prefix = prefix ? prefix[1] : ''
+
         $(this).select2({
             tags: element.attr('data-tags'),
             debug: true,
@@ -29,7 +33,7 @@
                         forward = forward.split(',');
 
                         for (var key in forward) {
-                            data_forward[forward[key]] = $('[name=' + forward[key] + ']').val();
+                            data_forward[forward[key].replace(/\{\{PREFIX\}\}/gi, '')] = $('[name=' + forward[key].replace(/\{\{PREFIX\}\}/gi, prefix) + ']').val();
                         }
 
                         data.forward = JSON.stringify(data_forward);
